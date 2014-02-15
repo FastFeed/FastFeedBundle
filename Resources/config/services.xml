@@ -10,6 +10,7 @@
         <parameter key="fastfeed.parser.atom.class">FastFeed\Parser\AtomParser</parameter>
         <parameter key="fastfeed.aggregator.rss.content.class">FastFeed\Aggregator\RSSContentAggregator</parameter>
         <parameter key="fastfeed.processor.image.class">FastFeed\Processor\ImageProcessor</parameter>
+        <parameter key="fastfeed.processor.sanitizer.class">FastFeed\Processor\SanitizerProcessor</parameter>
         <parameter key="fastfeed.guzzle.class">Guzzle\Http\Client</parameter>
     </parameters>
 
@@ -24,6 +25,9 @@
                 <argument type="service" id="fastfeed.parser.atom"/>
             </call>
             <call method="pushProcessor">
+                <argument type="service" id="fastfeed.processor.sanitizer"/>
+            </call>
+            <call method="pushProcessor">
                 <argument type="service" id="fastfeed.processor.image"/>
             </call>
         </service>
@@ -33,12 +37,18 @@
             </call>
         </service>
         <service id="fastfeed.parser.atom" class="%fastfeed.parser.atom.class%" />
+        <service id="fastfeed.processor.sanitizer" class="%fastfeed.processor.sanitizer.class%" >
+            <argument>%kernel.cache_dir%</argument>
+        </service>
         <service id="fastfeed.processor.image" class="%fastfeed.processor.image.class%">
             <call method="addIgnoredPattern">
                 <argument>#b.gif#</argument>
             </call>
             <call method="addIgnoredPattern">
                 <argument>#feeds.wordpress.com#</argument>
+            </call>
+            <call method="addIgnoredPattern">
+                <argument>#feeds.feedburner.com#</argument>
             </call>
         </service>
         <service id="fastfeed.aggregator.rss.content" class="%fastfeed.aggregator.rss.content.class%"/>
