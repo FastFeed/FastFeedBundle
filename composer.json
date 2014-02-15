@@ -1,14 +1,21 @@
 {
     "name": "fastfeed/fastfeed-bundle",
+    "description": "A simple to use Feed Client Library.",
+    "keywords": ["rss", "rss20", "feed", "feed parser", "atom", "atom10"],
     "require": {
         "fastfeed/fastfeed": "*"
     },
     "license": "MIT",
     "authors": [
         {
-            "name": "Daniel González Cerviño",
-            "email": "daniel.gonzalez@freelancemadrid.es"
+            "name": "Daniel González",
+            "homepage": "http://desarrolla2.com/"
         }
     ],
+    "autoload": {
+        "psr-0": {
+            "FastFeed\\FastFeedBundle": ""
+        }
+    },
     "minimum-stability": "dev"
 }
