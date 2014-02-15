@@ -1,0 +1,14 @@
+{
+    "name": "fastfeed/fastfeed-bundle",
+    "require": {
+        "fastfeed/fastfeed": "*"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniel González Cerviño",
+            "email": "daniel.gonzalez@freelancemadrid.es"
+        }
+    ],
+    "minimum-stability": "dev"
+}

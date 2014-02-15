@@ -1,0 +1,47 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="fastfeed.fastfeed.class">FastFeed\FastFeed</parameter>
+        <parameter key="fastfeed.parser.rss.class">FastFeed\Parser\RSSParser</parameter>
+        <parameter key="fastfeed.parser.atom.class">FastFeed\Parser\AtomParser</parameter>
+        <parameter key="fastfeed.aggregator.rss.content.class">FastFeed\Aggregator\RSSContentAggregator</parameter>
+        <parameter key="fastfeed.processor.image.class">FastFeed\Processor\ImageProcessor</parameter>
+        <parameter key="fastfeed.guzzle.class">Guzzle\Http\Client</parameter>
+    </parameters>
+
+    <services>
+        <service id="fastfeed" class="%fastfeed.fastfeed.class%">
+            <argument type="service" id="fastfeed.guzzle"/>
+            <argument type="service" id="logger"/>
+            <call method="pushParser">
+                <argument type="service" id="fastfeed.parser.rss"/>
+            </call>
+            <call method="pushParser">
+                <argument type="service" id="fastfeed.parser.atom"/>
+            </call>
+            <call method="pushProcessor">
+                <argument type="service" id="fastfeed.processor.image"/>
+            </call>
+        </service>
+        <service id="fastfeed.parser.rss" class="%fastfeed.parser.rss.class%">
+            <call method="pushAggregator">
+                <argument type="service" id="fastfeed.aggregator.rss.content"/>
+            </call>
+        </service>
+        <service id="fastfeed.parser.atom" class="%fastfeed.parser.atom.class%" />
+        <service id="fastfeed.processor.image" class="%fastfeed.processor.image.class%">
+            <call method="addIgnoredPattern">
+                <argument>#b.gif#</argument>
+            </call>
+            <call method="addIgnoredPattern">
+                <argument>#feeds.wordpress.com#</argument>
+            </call>
+        </service>
+        <service id="fastfeed.aggregator.rss.content" class="%fastfeed.aggregator.rss.content.class%"/>
+        <service id="fastfeed.guzzle" class="%fastfeed.guzzle.class%"/>
+    </services>
+</container>
