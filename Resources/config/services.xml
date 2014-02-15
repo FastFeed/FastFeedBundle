@@ -41,6 +41,7 @@
             </call>
         </service>
         <service id="fastfeed.parser.atom" class="%fastfeed.parser.atom.class%" />
+        <service id="fastfeed.processor.styles" class="%fastfeed.processor.styles.class%" />
         <service id="fastfeed.processor.sanitizer" class="%fastfeed.processor.sanitizer.class%" >
             <argument>%kernel.cache_dir%</argument>
         </service>
