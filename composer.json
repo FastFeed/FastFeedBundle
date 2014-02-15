@@ -14,7 +14,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "FastFeed\\FastFeedBundle": ""
+            "FastFeed\\FastFeedBundle\\": ""
         }
     },
     "minimum-stability": "dev"
