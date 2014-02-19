@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 
 <container xmlns="http://symfony.com/schema/dic/services"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
         <parameter key="fastfeed.fastfeed.class">FastFeed\FastFeed</parameter>
@@ -13,6 +13,10 @@
         <parameter key="fastfeed.processor.styles.class">FastFeed\Processor\RemoveStylesProcessor</parameter>
         <parameter key="fastfeed.processor.sanitizer.class">FastFeed\Processor\SanitizerProcessor</parameter>
         <parameter key="fastfeed.guzzle.class">Guzzle\Http\Client</parameter>
+        <parameter key="fastfeed.cache.class">FastFeed\Cache\FastFeed</parameter>
+        <parameter key="fastfeed.desarrolla2.cache.class">Desarrolla2\Cache\Cache</parameter>
+        <parameter key="fastfeed.desarrolla2.cache.adapter.class">Desarrolla2\Cache\Adapter\File</parameter>
+        <parameter key="fastfeed.cache.ttl">3600</parameter>
     </parameters>
 
     <services>
@@ -40,9 +44,9 @@
                 <argument type="service" id="fastfeed.aggregator.rss.content"/>
             </call>
         </service>
-        <service id="fastfeed.parser.atom" class="%fastfeed.parser.atom.class%" />
-        <service id="fastfeed.processor.styles" class="%fastfeed.processor.styles.class%" />
-        <service id="fastfeed.processor.sanitizer" class="%fastfeed.processor.sanitizer.class%" >
+        <service id="fastfeed.parser.atom" class="%fastfeed.parser.atom.class%"/>
+        <service id="fastfeed.processor.styles" class="%fastfeed.processor.styles.class%"/>
+        <service id="fastfeed.processor.sanitizer" class="%fastfeed.processor.sanitizer.class%">
             <argument>%kernel.cache_dir%</argument>
         </service>
         <service id="fastfeed.processor.image" class="%fastfeed.processor.image.class%">
@@ -58,5 +62,24 @@
         </service>
         <service id="fastfeed.aggregator.rss.content" class="%fastfeed.aggregator.rss.content.class%"/>
         <service id="fastfeed.guzzle" class="%fastfeed.guzzle.class%"/>
+
+        <!-- Cache -->
+        <service id="fastfeed.cache" class="%fastfeed.cache.class%" parent="fastfeed">
+            <call method="setCache">
+                <argument type="service" id="fastfeed.desarrolla2.cache" />
+            </call>
+        </service>
+        <service id="fastfeed.desarrolla2.cache.adapter" class="%fastfeed.desarrolla2.cache.adapter.class%">
+            <argument type="string">%kernel.cache_dir%/rss-client-bundle</argument>
+        </service>
+        <service id="fastfeed.desarrolla2.cache" class="%fastfeed.desarrolla2.cache.class%">
+            <call method="setAdapter">
+                <argument type="service" id="fastfeed.desarrolla2.cache.adapter"/>
+            </call>
+            <call method="setOption">
+                <argument type="string">ttl</argument>
+                <argument type="string">%fastfeed.cache.ttl%</argument>
+            </call>
+        </service>
     </services>
 </container>
