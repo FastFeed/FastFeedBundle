@@ -12,6 +12,8 @@
         <parameter key="fastfeed.processor.image.class">FastFeed\Processor\ImageProcessor</parameter>
         <parameter key="fastfeed.processor.styles.class">FastFeed\Processor\RemoveStylesProcessor</parameter>
         <parameter key="fastfeed.processor.sanitizer.class">FastFeed\Processor\SanitizerProcessor</parameter>
+        <parameter key="fastfeed.processor.striptags.class">FastFeed\Processor\StripTagsProcessor</parameter>
+        <parameter key="fastfeed.processor.path.class">FastFeed\Processor\PathProcessor</parameter>
         <parameter key="fastfeed.guzzle.class">Guzzle\Http\Client</parameter>
         <parameter key="fastfeed.cache.class">FastFeed\Cache\FastFeed</parameter>
         <parameter key="fastfeed.desarrolla2.cache.class">Desarrolla2\Cache\Cache</parameter>
@@ -36,6 +38,12 @@
                 <argument type="service" id="fastfeed.processor.sanitizer"/>
             </call>
             <call method="pushProcessor">
+                <argument type="service" id="fastfeed.processor.striptags"/>
+            </call>
+            <call method="pushProcessor">
+                <argument type="service" id="fastfeed.processor.path"/>
+            </call>
+            <call method="pushProcessor">
                 <argument type="service" id="fastfeed.processor.image"/>
             </call>
         </service>
@@ -46,6 +54,19 @@
         </service>
         <service id="fastfeed.parser.atom" class="%fastfeed.parser.atom.class%"/>
         <service id="fastfeed.processor.styles" class="%fastfeed.processor.styles.class%"/>
+        <service id="fastfeed.processor.path" class="%fastfeed.processor.path.class%"/>
+        <service id="fastfeed.processor.striptags" class="%fastfeed.processor.striptags.class%">
+            <call method="setAllowedTagsForIntro">
+                <argument>
+                    <![CDATA[<pre><cite><code><em><i><ul><li><ol><small><span><strike><a><b><p><br><h4><h5><h3>]]>
+                </argument>
+            </call>
+            <call method="setAllowedTagsForContent">
+                <argument>
+                    <![CDATA[<pre><cite><code><em><i><ul><li><ol><small><span><strike><a><b><p><br><img><h4><h5><h3><h2><table><tr><td><ht>]]>
+                </argument>
+            </call>
+        </service>
         <service id="fastfeed.processor.sanitizer" class="%fastfeed.processor.sanitizer.class%">
             <argument>%kernel.cache_dir%</argument>
         </service>
@@ -66,7 +87,7 @@
         <!-- Cache -->
         <service id="fastfeed.cache" class="%fastfeed.cache.class%" parent="fastfeed">
             <call method="setCache">
-                <argument type="service" id="fastfeed.desarrolla2.cache" />
+                <argument type="service" id="fastfeed.desarrolla2.cache"/>
             </call>
         </service>
         <service id="fastfeed.desarrolla2.cache.adapter" class="%fastfeed.desarrolla2.cache.adapter.class%">
