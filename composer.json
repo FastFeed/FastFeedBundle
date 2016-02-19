@@ -1,9 +1,11 @@
 {
     "name": "fastfeed/fastfeed-bundle",
-    "description": "A simple to use Feed Client Library.",
+    "type": "symfony-bundle",
+    "description": "Symfony bundle for FastFeed.",
     "keywords": ["rss", "rss20", "feed", "feed parser", "atom", "atom10"],
     "require": {
-        "fastfeed/fastfeed": "*"
+        "fastfeed/fastfeed": "^0.4",
+        "symfony/symfony": "^2.3|^3.0"
     },
     "license": "MIT",
     "authors": [
@@ -17,5 +19,9 @@
             "FastFeed\\FastFeedBundle\\": ""
         }
     },
-    "minimum-stability": "dev"
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
 }
